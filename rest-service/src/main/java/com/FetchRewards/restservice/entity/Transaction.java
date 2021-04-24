@@ -28,6 +28,10 @@ public class Transaction {
         this.timeStamp = timeStamp;
     }
 
+    public Transaction() {
+
+    }
+
     //Define Getter Setters
 
     public int getId() {
@@ -44,6 +48,22 @@ public class Transaction {
 
     public Date getTimeStamp() {
         return timeStamp;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setPayer(String payer) {
+        this.payer = payer;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     //Define toString
