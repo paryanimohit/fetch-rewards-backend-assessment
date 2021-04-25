@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -28,5 +29,11 @@ public class TransactionServiceImpl implements TransactionService{
     @Transactional
     public void addTransaction(Transaction transaction) {
         transactionDAO.addTransaction(transaction);
+    }
+
+    @Override
+    @Transactional
+    public HashMap<String, Integer> spendPoints(int points) {
+        return transactionDAO.spendPoints(points);
     }
 }
