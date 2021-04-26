@@ -8,7 +8,7 @@ import java.util.Date;
 public class Transaction {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
 
@@ -34,9 +34,9 @@ public class Transaction {
 
     //Define Getter Setters
 
-    public int getId() {
-        return id;
-    }
+//    public int getId() {
+//        return id;
+//    }
 
     public String getPayer() {
         return payer;

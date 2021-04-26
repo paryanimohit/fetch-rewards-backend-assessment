@@ -3,11 +3,11 @@ package com.FetchRewards.restservice.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "PAYER")
+//@Table(name = "PAYER")
 public class Payer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
 
@@ -17,8 +17,7 @@ public class Payer {
     @Column(name="points")
     private int points;
 
-    public Payer(int id, String payer, int points) {
-        this.id = id;
+    public Payer(String payer, int points) {
         this.payer = payer;
         this.points = points;
     }

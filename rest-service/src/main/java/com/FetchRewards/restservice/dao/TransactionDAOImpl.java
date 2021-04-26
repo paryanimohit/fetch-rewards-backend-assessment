@@ -27,10 +27,29 @@ public class TransactionDAOImpl implements TransactionDAO {
         Transaction newTransaction = entityManager.merge(transaction);
 //        transaction.setId(newTransaction.getId());
         Payer newPayer = new Payer();
-        //MAKE A CONDITION THAT IF PAYER ALREADY EXISTS IN DATABASE, ADD THE TOTAL POINTS. DO NOT MAKE NEW PAYER.
-        newPayer.setPayer(transaction.getPayer());
-        newPayer.setPoints(transaction.getPoints());
-        entityManager.merge(newPayer);
+        int tempPoints = 0;
+        //Fetch Payer table from database. Check if payer contains transaction.getPayer, if yes than add the points, else directly add.
+        Query theQuery = entityManager.createQuery("select payer,points from Payer");
+        List<Payer> payers = theQuery.getResultList();
+        if(payers.isEmpty()){
+            newPayer.setPayer(transaction.getPayer());
+            newPayer.setPoints(transaction.getPoints());
+            entityManager.merge(newPayer);
+        }
+        else {
+            for (Payer payer : payers) {
+                if (payer.getPayer().equals(transaction.getPayer())){
+                        tempPoints = payer.getPoints();
+                        tempPoints += transaction.getPoints();
+                        newPayer.setPoints(tempPoints);
+                }
+                else{
+                    newPayer.setPayer(transaction.getPayer());
+                    newPayer.setPoints(transaction.getPoints());
+                    entityManager.merge(newPayer);
+                }
+            }
+        }
     }
 
     @Override
