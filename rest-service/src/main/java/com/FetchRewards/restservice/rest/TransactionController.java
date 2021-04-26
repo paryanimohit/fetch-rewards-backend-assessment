@@ -1,8 +1,6 @@
 package com.FetchRewards.restservice.rest;
 
-import com.FetchRewards.restservice.entity.Payer;
 import com.FetchRewards.restservice.entity.Transaction;
-import com.FetchRewards.restservice.repository.PayerRepository;
 import com.FetchRewards.restservice.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -11,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8080")
@@ -19,15 +16,13 @@ import java.util.List;
 @RequestMapping("/api")
 public class TransactionController {
 
-//    private TransactionService transactionService;
-
     @Autowired
     TransactionRepository transactionRepository;
 
       @GetMapping("/transactions")
         public ResponseEntity<List<Transaction>> fetchAllTransactions(){
             try {
-                List<Transaction> transactions = new ArrayList<Transaction>();
+                List<Transaction> transactions = new ArrayList<>();
                 transactionRepository.findAll().forEach(transactions::add);
                 if (transactions.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -42,7 +37,6 @@ public class TransactionController {
         public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction){
             try {
                 Transaction newTransaction = transactionRepository.save(new Transaction(transaction.getPayer(), transaction.getPoints(), transaction.getTimestamp()));
-                //updatePayer(transaction);
                 return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
             } catch (Exception e) {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,12 +46,11 @@ public class TransactionController {
         @PostMapping("/transactions/points")
         public ResponseEntity<List<Transaction>> spendPoints(@RequestBody Transaction transaction){
             int points = transaction.getPoints();
-            int spendPoints = 0;
-            int tempPoints = 0;
-            int tempIndex = 0;
-//            HashMap<String, Integer> remainingPoints = new HashMap<String, Integer>();
-            List<Transaction> remainingPoints = new ArrayList<Transaction>();
-            List<String> tempPayers = new ArrayList<String>();
+            int spendPoints;
+            int tempPoints;
+            int tempIndex;
+            List<Transaction> remainingPoints = new ArrayList<>();
+            List<String> tempPayers = new ArrayList<>();
             List<Transaction> transactionData = transactionRepository.findAll(Sort.by("timestamp"));
             if (!(transactionData.isEmpty())){
                 while(points!=0){
@@ -76,19 +69,12 @@ public class TransactionController {
                             }
                             remainingPoints.add(t);
                             tempPayers.add(t.getPayer());
-                            spendPoints = 0;
-//                            Payer updatePoints = new Payer();
-//                            updatePoints.setPoints(spendPoints);
                         }
                         else if(points < spendPoints){
-                            spendPoints -= spendPoints - points;
                             t.setPoints(-points);
                             remainingPoints.add(t);
                             points = 0;
                             break;
-//                            //UPDATE SPENDPOINTS IN DATABASE
-//                            Payer updatePoints = new Payer();
-//                            updatePoints.setPoints(spendPoints);
                         }
                     }
                 }
@@ -97,9 +83,5 @@ public class TransactionController {
             else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-
-//            int points = transaction.getPoints();
-//            HashMap<String, Integer> deductedPoints = transactionService.spendPoints(points);
-//            return deductedPoints;
         }
 }
