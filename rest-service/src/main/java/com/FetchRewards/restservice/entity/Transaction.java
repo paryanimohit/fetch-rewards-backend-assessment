@@ -32,12 +32,6 @@ public class Transaction {
 
     }
 
-    //Define Getter Setters
-
-//    public int getId() {
-//        return id;
-//    }
-
     public String getPayer() {
         return payer;
     }

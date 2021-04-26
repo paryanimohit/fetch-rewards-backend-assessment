@@ -19,19 +19,19 @@ public class TransactionController {
     @Autowired
     TransactionRepository transactionRepository;
 
-      @GetMapping("/transactions")
-        public ResponseEntity<List<Transaction>> fetchAllTransactions(){
-            try {
-                List<Transaction> transactions = new ArrayList<>();
-                transactionRepository.findAll().forEach(transactions::add);
-                if (transactions.isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-                }
-                return new ResponseEntity<>(transactions, HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+//      @GetMapping("/transactions")
+//        public ResponseEntity<List<Transaction>> fetchAllTransactions(){
+//            try {
+//                List<Transaction> transactions = new ArrayList<>();
+//                transactionRepository.findAll().forEach(transactions::add);
+//                if (transactions.isEmpty()) {
+//                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//                }
+//                return new ResponseEntity<>(transactions, HttpStatus.OK);
+//            } catch (Exception e) {
+//                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        }
 
         @PostMapping("/transactions")
         public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction){
@@ -45,6 +45,10 @@ public class TransactionController {
 
         @PostMapping("/transactions/points")
         public ResponseEntity<List<Transaction>> spendPoints(@RequestBody Transaction transaction){
+
+            //Shift the code from line 49 to line 82 to a helper class tomorrow
+            //Remove Timestamp from return object
+            //Make a @Get route for /points that shows remaining points after the points spend
             int points = transaction.getPoints();
             int spendPoints;
             int tempPoints;
