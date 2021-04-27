@@ -6,11 +6,9 @@ import com.FetchRewards.restservice.repository.PayerRepository;
 import com.FetchRewards.restservice.repository.TransactionRepository;
 import com.FetchRewards.restservice.utility.DeepCopy;
 import com.FetchRewards.restservice.utility.SpendPointsHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,22 +66,29 @@ public class TransactionController {
         @PostMapping("/transactions/points")
         public ResponseEntity<List<Payer>> spendPoints(@RequestBody Transaction transaction){
 
-            //Remove Timestamp from return object
             //Develop Tests
-            //Check Code from line 73 to 78. It is updating Transaction Table Dont Know why
             List<Transaction> transactionData = transactionRepository.findAll(Sort.by("timestamp"));
+            List<Transaction> newTransactionData = new ArrayList<>();
+            for(Transaction t: transactionData){
+                Transaction newT = new Transaction(t);
+                newTransactionData.add(newT);
+            }
+
+            Transaction newTransaction = new Transaction(transaction);
 
             if (!(transactionData.isEmpty())) {
                 SpendPointsHelper h1 = new SpendPointsHelper();
-                List<Transaction> pointsSpent = h1.SpendPointsByTimeStamp(transactionData,transaction);
+                List<Transaction> pointsSpent = h1.SpendPointsByTimeStamp(newTransactionData,newTransaction);
                 List<Payer> points = new ArrayList<>();
 
                 for(Transaction point: pointsSpent){
                     String payerName = point.getPayer();
                     Integer payerPoints = point.getPoints();
+                    String newPayerName = String.valueOf(DeepCopy.deepCopy(payerName));
+                    int newPayerPoints = (int) DeepCopy.deepCopy(payerPoints);
                     Payer payer = new Payer();
-                    payer.setPayer(payerName);
-                    payer.setPoints(payerPoints);
+                    payer.setPayer(newPayerName);
+                    payer.setPoints(newPayerPoints);
                     points.add(payer);
                 }
 

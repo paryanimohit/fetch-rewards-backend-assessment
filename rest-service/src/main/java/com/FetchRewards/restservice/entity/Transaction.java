@@ -36,6 +36,10 @@ public class Transaction {
 
     }
 
+    public Transaction(Transaction transaction){
+        this(transaction.getPayer(),transaction.getPoints(),transaction.getTimestamp());
+    }
+
     public String getPayer() {
         return payer;
     }
