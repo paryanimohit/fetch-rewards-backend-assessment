@@ -1,10 +1,10 @@
 package com.FetchRewards.restservice.entity;
+
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name = "TRANSACTIONS")
-public class Transaction {
+@Table(name="payer")
+public class Payer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,22 +17,7 @@ public class Transaction {
     @Column(name="points")
     private int points;
 
-    @Column(name="timestamp")
-    private Date timestamp;
-
-    //Generate a constructor
-    public Transaction(String payer, int points, Date timestamp) {
-        this.payer = payer;
-        this.points = points;
-        this.timestamp = timestamp;
-    }
-
-    public Transaction(String payer, int points) {
-        this.payer = payer;
-        this.points = points;
-    }
-
-    public Transaction() {
+    public Payer() {
 
     }
 
@@ -42,10 +27,6 @@ public class Transaction {
 
     public int getPoints() {
         return points;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
     }
 
     public void setId(int id) {
@@ -60,19 +41,18 @@ public class Transaction {
         this.points = points;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public Payer(String payer, int points) {
+        this.id = id;
+        this.payer = payer;
+        this.points = points;
     }
-
-    //Define toString
 
     @Override
     public String toString() {
-        return "Transaction{" +
+        return "Payer{" +
                 "id=" + id +
                 ", payer='" + payer + '\'' +
                 ", points=" + points +
-                ", timestamp=" + timestamp +
                 '}';
     }
 }
