@@ -4,10 +4,7 @@ import com.FetchRewards.restservice.entity.Payer;
 import com.FetchRewards.restservice.entity.Transaction;
 import com.FetchRewards.restservice.repository.PayerRepository;
 import com.FetchRewards.restservice.repository.TransactionRepository;
-import com.FetchRewards.restservice.utility.DeepCopy;
 import com.FetchRewards.restservice.utility.SpendPointsHelper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -45,7 +42,8 @@ public class TransactionController {
         @PostMapping("/transactions")
         public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction){
             try {
-                Transaction newTransaction = transactionRepository.save(new Transaction(transaction.getPayer(), transaction.getPoints(), transaction.getTimestamp()));
+                Transaction newTransaction = transactionRepository
+                        .save(new Transaction(transaction.getPayer(), transaction.getPoints(), transaction.getTimestamp()));
                 try {
                     int tempPoints;
                     Payer payer = payerRepository.findByPayer(transaction.getPayer());
@@ -66,9 +64,10 @@ public class TransactionController {
         @PostMapping("/transactions/points")
         public ResponseEntity<List<Payer>> spendPoints(@RequestBody Transaction transaction){
 
-            //Develop Tests
             List<Transaction> transactionData = transactionRepository.findAll(Sort.by("timestamp"));
             List<Transaction> newTransactionData = new ArrayList<>();
+
+            //Creating deep copy to prevent object call by reference (Copy Constructor)
             for(Transaction t: transactionData){
                 Transaction newT = new Transaction(t);
                 newTransactionData.add(newT);
@@ -78,20 +77,9 @@ public class TransactionController {
 
             if (!(transactionData.isEmpty())) {
                 SpendPointsHelper h1 = new SpendPointsHelper();
-                List<Transaction> pointsSpent = h1.SpendPointsByTimeStamp(newTransactionData,newTransaction);
-                List<Payer> points = new ArrayList<>();
+                List<Payer> points = h1.SpendPointsByTimeStamp(newTransactionData,newTransaction);
 
-                for(Transaction point: pointsSpent){
-                    String payerName = point.getPayer();
-                    Integer payerPoints = point.getPoints();
-                    String newPayerName = String.valueOf(DeepCopy.deepCopy(payerName));
-                    int newPayerPoints = (int) DeepCopy.deepCopy(payerPoints);
-                    Payer payer = new Payer();
-                    payer.setPayer(newPayerName);
-                    payer.setPoints(newPayerPoints);
-                    points.add(payer);
-                }
-
+                //Saving Remaining points to Payer repository
                 int tempPoints;
                 for(Payer point: points){
                     tempPoints = point.getPoints();
