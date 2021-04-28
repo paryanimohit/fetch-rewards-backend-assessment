@@ -42,57 +42,83 @@ public class TransactionController {
         @PostMapping("/transactions")
         public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction){
             try {
-                Transaction newTransaction = transactionRepository
-                        .save(new Transaction(transaction.getPayer(), transaction.getPoints(), transaction.getTimestamp()));
                 try {
                     int tempPoints;
                     Payer payer = payerRepository.findByPayer(transaction.getPayer());
                     tempPoints = payer.getPoints()+transaction.getPoints();
-                    payer.setPoints(tempPoints);
-                    payerRepository.save(payer);
+                    if(tempPoints>=0){
+                        payer.setPoints(tempPoints);
+                        payerRepository.save(payer);
+                        Transaction newTransaction = transactionRepository
+                                .save(new Transaction(transaction.getPayer(), transaction.getPoints(), transaction.getTimestamp()));
+                        return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
+                    }
+                    else{
+                        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
                 }
                 catch(Exception e){
-                    payerRepository.save(new Payer(transaction.getPayer(), transaction.getPoints()));
+                    if(transaction.getPoints()<0){
+                        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
+                    else {
+                        payerRepository.save(new Payer(transaction.getPayer(), transaction.getPoints()));
+                        Transaction newTransaction = transactionRepository
+                                .save(new Transaction(transaction.getPayer(), transaction.getPoints(), transaction.getTimestamp()));
+                        return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
+                    }
                 }
-                return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
         @PostMapping("/transactions/points")
-        public ResponseEntity<List<Payer>> spendPoints(@RequestBody Transaction transaction){
+        public ResponseEntity<List<Payer>> spendPoints(@RequestBody Transaction transaction) {
 
-            List<Transaction> transactionData = transactionRepository.findAll(Sort.by("timestamp"));
-            List<Transaction> newTransactionData = new ArrayList<>();
-
-            //Creating deep copy to prevent object call by reference (Copy Constructor)
-            for(Transaction t: transactionData){
-                Transaction newT = new Transaction(t);
-                newTransactionData.add(newT);
-            }
-
-            Transaction newTransaction = new Transaction(transaction);
-
-            if (!(transactionData.isEmpty())) {
-                SpendPointsHelper h1 = new SpendPointsHelper();
-                List<Payer> points = h1.SpendPointsByTimeStamp(newTransactionData,newTransaction);
-
-                //Saving Remaining points to Payer repository
-                int tempPoints;
-                for(Payer point: points){
-                    tempPoints = point.getPoints();
-                    Payer payer = payerRepository.findByPayer(point.getPayer());
-                    payer.setPoints(payer.getPoints() + tempPoints);
-                    payerRepository.save(payer);
-                }
-
-                return new ResponseEntity<>(points, HttpStatus.OK);
+            int pointsToSpend = transaction.getPoints();
+            if (pointsToSpend <= 0) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+                try{
+                    //NOT WORKING IF I PASS POINTS FOR SECOND TIME. POINTS ARE GOING -ve IN PAYERS TABLE. LOOK FOR IT
+                    List<Transaction> transactionData = transactionRepository.findAll(Sort.by("timestamp"));
+                    List<Payer> payerData = payerRepository.findAll();
+                    int sumOfPoints = 0;
+                    for(Payer data: payerData){
+                        int payerPoint = data.getPoints();
+                        sumOfPoints+=payerPoint;
+                    }
+                    if(pointsToSpend < sumOfPoints){
+                        List<Transaction> newTransactionData = new ArrayList<>();
+                        //Creating deep copy to prevent object call by reference (Copy Constructor)
+                        for (Transaction t : transactionData) {
+                            Transaction newT = new Transaction(t);
+                            newTransactionData.add(newT);
+                        }
+                        Transaction newTransaction = new Transaction(transaction);
+                        //Check if transaction is less than total points available in the Payer
+                        SpendPointsHelper h1 = new SpendPointsHelper();
+                        List<Payer> spendPoints = h1.SpendPointsByTimeStamp(newTransactionData, newTransaction, transactionRepository);
+                        //Saving Remaining points to Payer repository
+                        int tempPoints;
+                        for (Payer point : spendPoints) {
+                            tempPoints = point.getPoints();
+                            Payer payer = payerRepository.findByPayer(point.getPayer());
+                            payer.setPoints(payer.getPoints() + tempPoints);
+                            payerRepository.save(payer);
+                        }
+                        return new ResponseEntity<>(spendPoints, HttpStatus.OK);
+                    }
+                    else{
+                        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
+
+                } catch (Exception e){
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    }
+                }
         }
 
         @GetMapping("/transactions/points")
