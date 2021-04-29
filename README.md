@@ -9,20 +9,54 @@ A Rest API developed with Spring Boot framework that deals with handelling user 
 3. Return Payer points balance.
 ```
 The following are pre-requisites to run the application:
+
+1. Java 16 
 ```
-1. Java 16 https://www.oracle.com/java/technologies/javase-jdk16-downloads.html
-2. MAVEN https://maven.apache.org/download.cgi (For a guide to install MAVEN, refer to (https://youtu.be/RfCWg5ay5B0)
-3. POSTMAN https://www.postman.com/downloads/
+https://www.oracle.com/java/technologies/javase-jdk16-downloads.html
+```
+2. MAVEN 
+```
+https://maven.apache.org/download.cgi (For a guide to install MAVEN, refer to (https://youtu.be/RfCWg5ay5B0)
+```
+3. POSTMAN 
+```
+https://www.postman.com/downloads/
 ```
 Installation Instructions for the Web-Service:
 ```
-1. Clone the repository by using "git clone <repository URI>"
+1. Clone the repository
+
+git clone <repository URI>
+```
+```
 2. Navigate to the rest-service folder through command line
-3. Run command "mvn clean install"
-4. Run command "java -jar target/rest-service-0.0.1-SNAPSHOT.jar"
-5. The server can be accessed on localhost:8080/api/transactions
-6. The H2 Database can be accessed at localhost:8080/h2
-7. To login to database, JDBC URL is located on Command Line as: H2 console available at '/h2'. Database available at 'jdbc:h2:mem:46fbc39c-e5a8-42e2-8f31-6f0280a50c2c'. (This is a dynamic URL and is changed each time the server is run)
+```
+```
+3. Run command 
+
+mvn clean install
+```
+```
+4. Run command 
+
+java -jar target/rest-service-0.0.1-SNAPSHOT.jar
+```
+```
+5. The server can be accessed at
+
+localhost:8080/api/transactions
+```
+```
+6. The H2 Database can be accessed at 
+
+localhost:8080/h2
+```
+```
+7. To login to database, JDBC URL is located on Command Line as: 
+
+H2 console available at '/h2'. Database available at 'jdbc:h2:mem:46fbc39c-e5a8-42e2-8f31-6f0280a50c2c'. 
+
+(This is a dynamic URL and is changed each time the server is run)
 ```
 The following routes can be run on POSTMAN:
 
