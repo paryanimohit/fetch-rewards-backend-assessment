@@ -2,19 +2,19 @@
 
 (https://fetch-hiring.s3.us-east-1.amazonaws.com/points.pdf)
 
-A Rest API developed with Spring Boot framework that deals with handelling user transactions for Fetch Rewards. The major functionalities include:
+###A Rest API developed with Spring Boot framework that deals with handelling user transactions for Fetch Rewards. The major functionalities include:
 ```
 1. Adding Transactions for a specific Payer and Date.
 2. Spending the points available for each payer based on the oldest transaction.
 3. Return Payer points balance.
 ```
-The following are prerequisites to run the application:
+###The following are prerequisites to run the application:
 ```
 1. Java 16 https://www.oracle.com/java/technologies/javase-jdk16-downloads.html
 2. MAVEN Install: https://maven.apache.org/download.cgi (For a guide to install MAVEN, refer to https://youtu.be/RfCWg5ay5B0)
 3. POSTMAN Install: https://www.postman.com/downloads/
 ```
-To Run the project:
+###Installation Instructions for the Web-Service:
 ```
 1. Clone the repository by using "git clone <repository URI>"
 2. Navigate to the rest-service folder through command line
@@ -24,7 +24,7 @@ To Run the project:
 6. The H2 Database can be accessed at localhost:8080/h2
 7. To login to database, JDBC URL is located on Command Line as: H2 console available at '/h2'. Database available at 'jdbc:h2:mem:46fbc39c-e5a8-42e2-8f31-6f0280a50c2c'. (This is a dynamic URL and is changed each time the server is run)
 ```
-The following routes can be run on POSTMAN:
+###The following routes can be run on POSTMAN:
 
 1. To add Transactions for specific payer and date: 
 ```
