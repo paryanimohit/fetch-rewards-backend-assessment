@@ -10,9 +10,9 @@ A Rest API developed with Spring Boot framework that deals with handelling user 
 ```
 The following are prerequisites to run the application:
 ```
-1. Java 16 https://www.oracle.com/java/technologies/javase-jdk16-downloads.html
-2. MAVEN Install: https://maven.apache.org/download.cgi (For a guide to install MAVEN, refer to https://youtu.be/RfCWg5ay5B0)
-3. POSTMAN Install: https://www.postman.com/downloads/
+1. [Java 16] (https://www.oracle.com/java/technologies/javase-jdk16-downloads.html)
+2. [MAVEN] (https://maven.apache.org/download.cgi (For a guide to install MAVEN, refer to (https://youtu.be/RfCWg5ay5B0)))
+3. [POSTMAN] (https://www.postman.com/downloads/)
 ```
 Installation Instructions for the Web-Service:
 ```
