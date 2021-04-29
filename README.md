@@ -7,7 +7,7 @@ A Rest API developed with Spring Boot framework that deals with handelling user 
 1. Adding Transactions for a specific Payer and Date.
 2. Spending the points available for each payer based on the oldest transaction.
 3. Return Payer points balance.
-
+```
 The following are prerequisites to run the application:
 ```
 1. Java 16 (https://www.oracle.com/java/technologies/javase-jdk16-downloads.html)
