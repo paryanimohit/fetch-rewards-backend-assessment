@@ -26,7 +26,7 @@ Installation Instructions for the Web-Service:
 ```
 1. Clone the repository
 
-git clone <repository URI>
+git clone https://github.com/paryanimohit/fetch-rewards-backend-assessment.git
 ```
 ```
 2. Navigate to the rest-service folder through command line
