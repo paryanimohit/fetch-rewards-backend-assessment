@@ -2,19 +2,19 @@
 
 (https://fetch-hiring.s3.us-east-1.amazonaws.com/points.pdf)
 
-###A Rest API developed with Spring Boot framework that deals with handelling user transactions for Fetch Rewards. The major functionalities include:
+A Rest API developed with Spring Boot framework that deals with handelling user transactions for Fetch Rewards. The major functionalities include:
 ```
 1. Adding Transactions for a specific Payer and Date.
 2. Spending the points available for each payer based on the oldest transaction.
 3. Return Payer points balance.
 
-###The following are prerequisites to run the application:
+The following are prerequisites to run the application:
 ```
 1. Java 16 (https://www.oracle.com/java/technologies/javase-jdk16-downloads.html)
 2. MAVEN Install: https://maven.apache.org/download.cgi (For a guide to install MAVEN, refer to https://youtu.be/RfCWg5ay5B0)
 3. POSTMAN Install: https://www.postman.com/downloads/
 
-###To Run the project:
+To Run the project:
 ```
 1. Clone the repository by using "git clone <repository URI>"
 2. Navigate to the rest-service folder through command line
@@ -26,13 +26,13 @@
 
 The following routes can be run on POSTMAN:
 
-###1. To add Transactions for specific payer and date: 
+1. To add Transactions for specific payer and date: 
 
-###localhost:8080/api/transactions POST
+localhost:8080/api/transactions POST
 ```
-###Example JSON : { "payer": "DANNON", "points": 1000, "timestamp": "2020-11-02T14:00:00Z" }
+Example JSON : { "payer": "DANNON", "points": 1000, "timestamp": "2020-11-02T14:00:00Z" }
 ```
-###Example Output/Response : 
+Example Output/Response : 
 ```
 {
     "payer": "DANNON",
@@ -40,13 +40,13 @@ The following routes can be run on POSTMAN:
     "timestamp": "2020-11-02T14:00:00.000+00:00"
 }
 
-###2. To Spend points:
+2. To Spend points:
 
-###localhost:8080/api/transactions/points POST
+localhost:8080/api/transactions/points POST
 ```
-###Example JSON: { "points": 5000 }
+Example JSON: { "points": 5000 }
 ```
-###Example Output/Response : 
+Example Output/Response : 
 ```
 [
     {
@@ -63,11 +63,11 @@ The following routes can be run on POSTMAN:
     }
 ]
 
-###3. To get all Payers and Balances
+3. To get all Payers and Balances
 
-###localhost:8080/api/transactions/points GET
+localhost:8080/api/transactions/points GET
 ```
-###Example Output/Response:
+Example Output/Response:
 ```
 {
     "UNILEVER": 0,
@@ -75,11 +75,11 @@ The following routes can be run on POSTMAN:
     "DANNON": 1000
 }
 
-###4. To get all transactions
+4. To get all transactions
 
-###localhost:8080/api/transactions GET
+localhost:8080/api/transactions GET
 ```
-###Example Output/Response: 
+Example Output/Response: 
 ```
 [
     {
